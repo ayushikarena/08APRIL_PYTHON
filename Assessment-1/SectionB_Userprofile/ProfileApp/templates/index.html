@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+
+<h2>Create User Profile</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Save</button>
+
+</form>
+
+<hr>
+
+<h2>User Profiles</h2>
+
+<ul>
+
+{% for profile in profiles %}
+
+    <li>
+        Username: {{ profile.username }}
+        |
+        Age: {{ profile.age }}
+    </li>
+
+{% empty %}
+
+    <li>No Profiles Found</li>
+
+{% endfor %}
+
+</ul>
+
+</body>
+</html>
