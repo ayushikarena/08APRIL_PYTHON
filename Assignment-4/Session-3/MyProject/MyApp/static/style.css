@@ -1,0 +1,15 @@
+body{
+    background-color: #f5f7fa;
+}
+
+h1{
+    color: darkblue;
+}
+
+.card{
+    transition: 0.3s;
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
