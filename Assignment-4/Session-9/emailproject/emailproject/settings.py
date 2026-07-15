@@ -106,9 +106,9 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = "miranena1017@gmail.com"
+EMAIL_HOST_USER = "karenaaayushi19@gmail.com"
 
-EMAIL_HOST_PASSWORD = "brea jbnc ajyz hhjn"
+EMAIL_HOST_PASSWORD = "oujj mabw ytea ykzy"
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
