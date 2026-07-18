@@ -1,0 +1,154 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Profile</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+
+background:#ececec;
+
+}
+
+.card{
+
+width:500px;
+margin:60px auto;
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,.15);
+text-align:center;
+
+}
+
+img{
+
+width:180px;
+height:180px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid #0095f6;
+margin-bottom:20px;
+
+}
+
+h2{
+
+margin-bottom:10px;
+color:#222;
+
+}
+
+p{
+
+margin:10px;
+font-size:18px;
+
+}
+
+a{
+
+display:inline-block;
+margin-top:20px;
+padding:12px 25px;
+background:#0095f6;
+color:white;
+text-decoration:none;
+border-radius:6px;
+
+}
+
+a:hover{
+
+background:#0077c8;
+
+}
+.buttons{
+    margin-top:20px;
+}
+
+.buttons a,
+.logout-btn{
+    display:inline-block;
+    margin:8px;
+    padding:12px 25px;
+    border:none;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.buttons a{
+    background:#0095f6;
+    color:white;
+}
+
+.buttons a:hover{
+    background:#0077c8;
+}
+
+.logout-btn{
+    background:#e74c3c;
+    color:white;
+}
+
+.logout-btn:hover{
+    background:#c0392b;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+{% if profile.profile_pic %}
+
+<img src="{{ profile.profile_pic.url }}">
+
+{% else %}
+
+<img src="{% static 'images/default.png' %}">
+
+{% endif %}
+
+<h2>{{ profile.display_name }}</h2>
+
+<p><strong>Bio:</strong> {{ profile.bio }}</p>
+
+<p><strong>Phone:</strong> {{ profile.phone_number }}</p>
+
+
+<div class="buttons">
+
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
+
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
