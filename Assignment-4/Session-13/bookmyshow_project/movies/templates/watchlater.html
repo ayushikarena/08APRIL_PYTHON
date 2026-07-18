@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>BookMyShow Watch Later</title>
+
+<style>
+
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+        background:#111827;
+        color:white;
+    }
+
+    header{
+        background:#d81f26;
+        color:white;
+        padding:20px;
+        text-align:center;
+        font-size:32px;
+        font-weight:bold;
+    }
+
+    .container{
+        width:90%;
+        margin:30px auto;
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+        gap:25px;
+    }
+
+    .movie{
+        background:#1f2937;
+        border-radius:12px;
+        padding:20px;
+        box-shadow:0 4px 12px rgba(0,0,0,.4);
+        transition:.3s;
+    }
+
+    .movie:hover{
+        transform:translateY(-8px);
+    }
+
+    .movie h2{
+        color:#ff4d4d;
+        margin-bottom:15px;
+    }
+
+    .movie p{
+        margin:8px 0;
+        color:#ddd;
+        font-size:17px;
+    }
+
+    button{
+        margin-top:15px;
+        width:100%;
+        padding:12px;
+        border:none;
+        border-radius:8px;
+        background:#d81f26;
+        color:white;
+        font-size:16px;
+        cursor:pointer;
+        transition:.3s;
+    }
+
+    button:hover{
+        background:#ff3b3b;
+    }
+
+    #message{
+        width:90%;
+        margin:20px auto;
+        text-align:center;
+        font-size:20px;
+        color:#00ff88;
+        font-weight:bold;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>My Watch Later Movies</h1>
+
+<div id="message"></div>
+{% for movie in movies %}
+    <div class="movie"id="movie{{movie.id}}">
+    <h2>{{ movie.title }}</h2>
+
+    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+
+    <button onclick="deleteMovie({{ movie.id }})">Remove</button>
+    </div>
+{% endfor %}
+<script src="/static/script.js"></script>
+</body>
+</html>
