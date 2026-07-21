@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders</title>
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+            margin:0;
+        }
+        .container{
+            width:70%;
+            margin:60px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+        h1{
+            color:#ff4d4d;
+        }
+        .order{
+            border-bottom:1px solid #ddd;
+            padding:15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍔 My Orders</h1>
+
+    <h3>Welcome {{ request.user.username }}</h3>
+
+    <div class="order">
+        <strong>Pizza</strong><br>
+        ₹299<br>
+        Delivered
+    </div>
+
+    <div class="order">
+        <strong>Burger</strong><br>
+        ₹149<br>
+        On the Way
+    </div>
+
+    <div class="order">
+        <strong>Cold Drink</strong><br>
+        ₹99<br>
+        Preparing
+    </div>
+
+</div>
+
+</body>
+</html>

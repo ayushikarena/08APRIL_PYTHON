@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Add Review</title>
+
+<style>
+
+body{
+background:#fafafa;
+font-family:Arial;
+}
+
+.container{
+width:500px;
+margin:auto;
+margin-top:60px;
+background:white;
+padding:25px;
+box-shadow:0 0 10px gray;
+border-radius:8px;
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin:10px 0;
+}
+
+button{
+padding:10px;
+background:#0066cc;
+color:white;
+border:none;
+width:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Add Movie Review</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <input type="text" name="movie" placeholder="Movie Name">
+
+    <textarea name="review" placeholder="Write Review"></textarea>
+
+    <button type="submit">Submit Review</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>
