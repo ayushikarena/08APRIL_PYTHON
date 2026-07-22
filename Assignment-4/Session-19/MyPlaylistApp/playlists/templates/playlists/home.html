@@ -1,0 +1,66 @@
+{% extends 'playlists/base.html' %}
+
+{% block title %}Home - MyPlaylistApp{% endblock %}
+
+{% block content %}
+<div class="row align-items-center justify-content-center">
+    <div class="col-lg-10">
+        <!-- Magazine Style Hero Banner -->
+        <div class="magazine-card p-5 mb-5 text-center position-relative shadow-sm">
+            <div class="mb-4">
+                <span class="badge text-brand-color border px-3 py-2 rounded-0 fs-6" style="border-color: var(--custom-border) !important; background-color: var(--track-bg);">
+                    <i class="bi bi-journal-bookmark-fill me-1"></i> Special Edition
+                </span>
+            </div>
+            
+            <h1 class="display-3 fw-bold mb-4 text-primary-custom" style="font-style: italic;">
+                Discover & Organize <br>Your <span class="text-brand-color">Sound Library</span>
+            </h1>
+            
+            <p class="lead text-muted-custom mx-auto mb-5" style="max-width: 680px; font-style: italic;">
+                A clean academic submission showcasing custom-built Django controllers styled with elegant serif typography. Easily toggle between light and dark themes using the controller in the navigation bar.
+            </p>
+            
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{% url 'playlist_list' %}" class="btn btn-magazine d-flex align-items-center px-4">
+                    <i class="bi bi-collection-play me-2"></i> Browse Playlists
+                </a>
+                <a href="/admin/" target="_blank" class="btn btn-outline-magazine d-flex align-items-center px-4">
+                    <i class="bi bi-sliders me-2"></i> Admin Panel
+                </a>
+            </div>
+        </div>
+        
+        <!-- Info Cards Row -->
+        <div class="row mt-5 g-4 text-center">
+            <div class="col-md-4">
+                <div class="magazine-card h-100 p-4">
+                    <div class="text-brand-color mb-3">
+                        <i class="bi bi-music-player fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Curated Libraries</h4>
+                    <p class="text-muted-custom small mb-0">Create and modify music or audio collections complete with detailed descriptions and custom upload banners.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="magazine-card h-100 p-4">
+                    <div class="text-brand-color mb-3">
+                        <i class="bi bi-play-circle fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Stream Audio</h4>
+                    <p class="text-muted-custom small mb-0">Listen directly from the detail panel using built-in HTML5 playback controls without external frameworks.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="magazine-card h-100 p-4">
+                    <div class="text-brand-color mb-3">
+                        <i class="bi bi-code-square fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Built-in API</h4>
+                    <p class="text-muted-custom small mb-0">Features a structured JSON endpoint ready for academic demonstration and data integration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

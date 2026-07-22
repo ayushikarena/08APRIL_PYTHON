@@ -1,0 +1,121 @@
+{% extends 'playlists/base.html' %}
+
+{% block title %}{{ playlist.title }} - Tracks Library{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Left Column: Playlist Details & Cover -->
+    <div class="col-lg-5">
+        <div class="magazine-detail-card shadow-sm overflow-hidden mb-4">
+            <!-- Cover image -->
+            <div class="detail-img-container">
+                {% if playlist.cover_image %}
+                    <img src="{{ playlist.cover_image.url }}" alt="{{ playlist.title }}">
+                {% else %}
+                    <div class="d-flex flex-column align-items-center justify-content-center py-5 w-100" style="background-color: var(--track-bg);">
+                        <i class="bi bi-music-note-beamed text-muted-custom display-1"></i>
+                        <span class="text-muted-custom small mt-2">No Cover Image</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-2 text-primary-custom" style="font-style: italic;">{{ playlist.title }}</h2>
+                <div class="text-muted-custom small mb-4 d-flex align-items-center">
+                    <i class="bi bi-calendar3 me-2 text-brand-color"></i> Library Created: {{ playlist.created_at|date:"F d, Y" }}
+                </div>
+                
+                <p class="text-muted-custom mb-4" style="line-height: 1.8; white-space: pre-line; font-style: italic;">
+                    {{ playlist.description }}
+                </p>
+                
+                <a href="{% url 'playlist_list' %}" class="btn btn-outline-magazine rounded-0 px-4">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Column: Songs List -->
+    <div class="col-lg-7">
+        <div class="magazine-detail-card p-4 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold mb-0 text-primary-custom" style="font-style: italic;">Tracks List</h3>
+                <span class="badge border text-primary-custom rounded-0 px-3 py-2" style="border-color: var(--custom-border) !important; background-color: var(--track-bg);">
+                    <i class="bi bi-music-note-beamed text-brand-color me-1"></i> {{ playlist.songs.count }} Songs
+                </span>
+            </div>
+            
+            <hr class="mb-4" style="border-color: var(--custom-border);">
+            
+            {% if playlist.songs.all %}
+                <div class="tracks-container">
+                    {% for song in playlist.songs.all %}
+                        <div class="track-item-magazine d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3" onclick="togglePlay(event, this)" style="cursor: pointer;">
+                            <div class="d-flex align-items-center">
+                                <!-- Song Poster Image / Thumbnail -->
+                                {% if song.song_image %}
+                                    <img src="{{ song.song_image.url }}" alt="{{ song.title }}" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border: 1px solid var(--custom-border); border-radius: 2px;">
+                                {% else %}
+                                    <div class="text-brand-color rounded-0 d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; min-width: 50px; background-color: var(--custom-bg); border: 1px solid var(--custom-border);">
+                                        <i class="bi bi-music-note fs-4"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-primary-custom">{{ song.title }}</h6>
+                                    {% if song.artist %}
+                                        <span class="text-muted-custom small">by {{ song.artist }}</span>
+                                    {% else %}
+                                        <span class="text-muted-custom small">Unknown Artist</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Audio player -->
+                            <div>
+                                <audio controls class="w-100" style="max-width: 285px;">
+                                    <source src="{{ song.audio_file.url }}">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5 rounded-0 border border-secondary border-dashed" style="background: var(--track-bg);">
+                    <i class="bi bi-disc text-muted-custom display-4"></i>
+                    <h5 class="fw-bold mt-3 text-primary-custom">This Library is Empty</h5>
+                    <p class="text-muted-custom small px-3">Add tracks in the Django admin panel to make them show up here.</p>
+                    <a href="/admin/" target="_blank" class="btn btn-sm btn-magazine mt-2 rounded-0 px-3">
+                        <i class="bi bi-plus-lg"></i> Add Songs
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePlay(event, element) {
+        // If the user clicks on the native browser audio bar itself, let the browser handle it
+        if (event.target.closest('audio')) {
+            return;
+        }
+        
+        const audio = element.querySelector('audio');
+        if (audio) {
+            if (audio.paused) {
+                // Pause all other audio players currently playing on the page
+                document.querySelectorAll('audio').forEach(a => {
+                    if (a !== audio) {
+                        a.pause();
+                    }
+                });
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+    }
+</script>
+{% endblock %}

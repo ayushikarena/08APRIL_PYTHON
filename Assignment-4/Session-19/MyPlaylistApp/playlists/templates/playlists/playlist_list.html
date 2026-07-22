@@ -1,0 +1,68 @@
+{% extends 'playlists/base.html' %}
+
+{% block title %}Playlists - MyPlaylistApp{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h1 class="fw-bold mb-1 text-primary-custom" style="font-style: italic;">Curated Playlists</h1>
+        <p class="text-muted-custom">Select a library below to explore the song tracks and listen to music.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <span class="badge border text-primary-custom px-3 py-2 rounded-0 fs-6" style="border-color: var(--custom-border) !important; background-color: var(--custom-card-bg);">
+            <i class="bi bi-collection-play-fill text-brand-color me-1"></i> {{ playlists|length }} Libraries
+        </span>
+    </div>
+</div>
+
+<hr class="mb-5" style="border-color: var(--custom-border);">
+
+<!-- Check if playlists exist -->
+{% if playlists %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for playlist in playlists %}
+            <div class="col">
+                <div class="magazine-card h-100 d-flex flex-column">
+                    <!-- Image Wrapper -->
+                    <div class="playlist-img-wrapper">
+                        {% if playlist.cover_image %}
+                            <img src="{{ playlist.cover_image.url }}" alt="{{ playlist.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <div class="d-flex flex-column align-items-center justify-content-center h-100 w-100">
+                                <i class="bi bi-music-note-beamed playlist-placeholder-icon"></i>
+                                <span class="text-muted-custom small mt-2">No Cover Image</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Card Body -->
+                    <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                        <h3 class="card-title fw-bold mb-2 text-primary-custom" style="font-style: italic;">{{ playlist.title }}</h3>
+                        <p class="card-text text-muted-custom small flex-grow-1 mb-4" style="line-height: 1.6;">
+                            {{ playlist.description|truncatewords:15 }}
+                        </p>
+                        
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top" style="border-color: var(--custom-border) !important;">
+                            <span class="text-muted-custom small">
+                                <i class="bi bi-music-note-list text-brand-color me-1"></i> {{ playlist.songs.count }} Tracks
+                            </span>
+                            <a href="{% url 'playlist_detail' playlist.id %}" class="btn btn-sm btn-magazine px-3 rounded-0">
+                                View Tracks <i class="bi bi-arrow-right-short ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5 magazine-card">
+        <i class="bi bi-music-note-beamed text-muted-custom display-1"></i>
+        <h3 class="fw-bold mt-3 text-primary-custom">No Playlists Found</h3>
+        <p class="text-muted-custom">Please visit the Admin Panel to register your first playlist.</p>
+        <a href="/admin/" target="_blank" class="btn btn-magazine mt-3">
+            <i class="bi bi-plus-lg me-1"></i> Add Playlist
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
