@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Book IPL Tickets — Paytm Payment{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header bg-white border-bottom py-4 mb-4">
+    <div class="container">
+        <h1 class="fw-bold mb-2">IPL Ticket Booking</h1>
+        <p class="text-muted">Fill in your details and click "Pay Now" to proceed to Paytm</p>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+
+        <!-- LEFT: Booking Form -->
+        <div class="col-lg-7 col-md-9">
+            <div class="card p-4 mb-4">
+                <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-2">
+                    <div>
+                        <h4 class="mb-0 fw-bold">Booking Details</h4>
+                        <small class="text-muted">All fields are required</small>
+                    </div>
+                </div>
+
+                <form method="post" action="" id="bookingForm">
+                    {% csrf_token %}
+
+                    <!-- Row 1: Name + Email -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" name="customer_name" id="customer_name" placeholder="John Doe" required autocomplete="name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="john@example.com" required autocomplete="email">
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Mobile -->
+                    <div class="mb-3">
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" class="form-control" name="mobile" id="mobile" placeholder="9876543210" maxlength="15" required autocomplete="tel">
+                        <div class="form-text text-muted">Enter 10-digit mobile number</div>
+                    </div>
+
+                    <!-- Row 3: Match Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Match</label>
+                        <select class="form-select" name="match_name" id="match_name" required>
+                            <option value="" disabled selected>— Choose an IPL Match —</option>
+                            <option value="Mumbai Indians vs Chennai Super Kings">MI vs CSK — Mumbai</option>
+                            <option value="Royal Challengers vs Kolkata Knight Riders">RCB vs KKR — Bangalore</option>
+                            <option value="Delhi Capitals vs Rajasthan Royals">DC vs RR — Delhi</option>
+                            <option value="Punjab Kings vs Sunrisers Hyderabad">PBKS vs SRH — Mohali</option>
+                            <option value="Gujarat Titans vs Lucknow Super Giants">GT vs LSG — Ahmedabad</option>
+                            <option value="IPL Final 2025">IPL FINAL 2025 — Ahmedabad</option>
+                        </select>
+                    </div>
+
+                    <!-- Row 4: Tickets + Amount -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Number of Tickets</label>
+                            <input type="number" class="form-control" name="num_tickets" id="num_tickets" min="1" max="10" value="1" required onchange="calculateAmount()">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Total Amount (₹)</label>
+                            <input type="number" class="form-control fw-bold text-primary" name="amount" id="amount" value="500" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <!-- Price Guide -->
+                    <div class="alert alert-info mb-4">
+                        <strong>Ticket Price:</strong> ₹500 per ticket (General Stand) | ₹1500 per ticket (Premium Stand)
+                        <br>
+                        <small>Manually adjust the amount based on your seat choice.</small>
+                    </div>
+
+                    <!-- Pay Now Button -->
+                    <button type="submit" class="btn btn-primary w-100 py-2 fs-5" id="payBtn">
+                        Pay Now with Paytm
+                    </button>
+
+                    <p class="text-center mt-3 text-muted" style="font-size: 0.8rem;">
+                        Secured by Paytm | CSRF Protected
+                    </p>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT: Info Panel -->
+        <div class="col-lg-3 col-md-9">
+            <div class="card p-3 mb-3 bg-white border">
+                <h5 class="fw-bold mb-3 text-primary">Payment Flow</h5>
+                <ol class="text-muted p-0 ps-3 mb-0" style="font-size: 0.9rem; line-height: 1.8;">
+                    <li>Fill booking form</li>
+                    <li>Booking saved to DB</li>
+                    <li>Paytm token generated</li>
+                    <li>Redirected to Paytm</li>
+                    <li>Pay on Paytm page</li>
+                    <li>Callback received</li>
+                    <li>Status updated in DB</li>
+                </ol>
+            </div>
+
+            <div class="card p-3 border border-warning bg-light">
+                <h5 class="fw-bold mb-2 text-warning">Sandbox Mode</h5>
+                <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.6;">
+                    Add your Paytm Merchant ID and Key in <code>.env</code> file. Register at developer.paytm.com.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function calculateAmount() {
+        const tickets = parseInt(document.getElementById('num_tickets').value) || 1;
+        const pricePerTicket = 500;
+        document.getElementById('amount').value = tickets * pricePerTicket;
+    }
+
+    document.getElementById('bookingForm').addEventListener('submit', function() {
+        const btn = document.getElementById('payBtn');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+        btn.disabled = true;
+    });
+</script>
+{% endblock %}

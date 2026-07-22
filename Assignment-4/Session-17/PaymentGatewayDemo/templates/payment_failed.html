@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Failed{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+
+            <div class="card p-5 text-center border-danger bg-white">
+                <div class="text-danger fs-1 mb-3">✗</div>
+                <h2 class="fw-bold text-danger mb-3">Payment Failed</h2>
+                <p class="text-muted mb-4">We could not process your payment. No charges were made.</p>
+
+                {% if error %}
+                <div class="alert alert-danger text-start mb-4">
+                    <strong>Error details:</strong> {{ error }}
+                </div>
+                {% endif %}
+
+                <div class="bg-light p-3 rounded border text-start mb-4">
+                    <h6 class="fw-bold mb-2">Common Causes</h6>
+                    <ul class="text-muted mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
+                        <li>User cancelled the transaction</li>
+                        <li>Insufficient bank balance</li>
+                        <li>Authentication failed (OTP, 3D secure)</li>
+                        <li>Incorrect API credentials</li>
+                    </ul>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                    <a href="{% url 'payments:book_ticket' %}" class="btn btn-outline-primary">Try Booking Again</a>
+                    <a href="{% url 'payments:food_order' %}" class="btn btn-outline-success">Try Food Order Again</a>
+                    <a href="{% url 'payments:paypal_pay' %}" class="btn btn-outline-warning">Try PayPal Again</a>
+                    <a href="{% url 'payments:home' %}" class="text-secondary mt-2 text-decoration-none">Back to Home</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

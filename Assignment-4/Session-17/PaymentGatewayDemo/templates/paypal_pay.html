@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}PayPal Payment — Sandbox{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header bg-white border-bottom py-4 mb-4">
+    <div class="container">
+        <h1 class="fw-bold mb-2">PayPal Sandbox Payment</h1>
+        <p class="text-muted">Create order &rarr; Approve on PayPal &rarr; Capture payment &rarr; Save to database</p>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+
+        <!-- LEFT: Payment Form -->
+        <div class="col-lg-6 col-md-8">
+            <div class="card p-4 mb-4">
+                <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-2">
+                    <div>
+                        <h4 class="mb-0 fw-bold">Payment Details</h4>
+                        <small class="text-muted">Powered by PayPal Sandbox</small>
+                    </div>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger mb-4">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="post" action="" id="paypalForm">
+                    {% csrf_token %}
+
+                    <!-- Customer Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="customer_name" placeholder="John Doe" required>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <!-- Payment Description -->
+                    <div class="mb-3">
+                        <label class="form-label">Payment Description</label>
+                        <input type="text" class="form-control" name="description" placeholder="e.g. Course Fee" value="Django Course Payment" required>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="mb-4">
+                        <label class="form-label">Amount (USD)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" name="amount" id="paypalAmount" min="1" max="10000" step="0.01" value="10.00" required onchange="updatePaypalBtn()">
+                        </div>
+                        <div class="form-text text-muted">PayPal Sandbox uses USD. Transactions are simulated.</div>
+                    </div>
+
+                    <!-- PayPal Pay Button -->
+                    <button type="submit" class="btn btn-warning w-100 py-2 fs-5" id="paypalBtn">
+                        Pay $10.00 with PayPal
+                    </button>
+
+                    <p class="text-center mt-3 text-muted" style="font-size: 0.8rem;">
+                        You'll be redirected to PayPal's secure page
+                    </p>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT: PayPal Flow Explanation -->
+        <div class="col-lg-4 col-md-8">
+            <div class="card p-3 mb-3 bg-white border">
+                <h5 class="fw-bold mb-3 text-warning">PayPal Payment Flow</h5>
+                
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">1</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">Create Order on PayPal API</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">2</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">Store Payment ID</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">3</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">Redirect to PayPal Login</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">4</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">User Approves Payment</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">5</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">PayPal redirects to Success URL</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">6</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">Capture the Payment</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">7</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">Save to Database</span>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-2">
+                    <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; min-width: 24px; font-size: 0.75rem;">8</div>
+                    <span class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">Show Success Page</span>
+                </div>
+            </div>
+
+            <div class="card p-3 border border-warning bg-light">
+                <h5 class="fw-bold mb-2 text-warning">Sandbox Testing</h5>
+                <p class="text-muted mb-0" style="font-size: 0.82rem; line-height: 1.6;">
+                    Go to <a href="https://developer.paypal.com" target="_blank" class="text-warning fw-bold">developer.paypal.com</a>. Create a sandbox buyer account to login and approve test payments.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updatePaypalBtn() {
+        const amount = parseFloat(document.getElementById('paypalAmount').value) || 10;
+        document.getElementById('paypalBtn').textContent = 'Pay $' + amount.toFixed(2) + ' with PayPal';
+    }
+
+    document.getElementById('paypalForm').addEventListener('submit', function() {
+        const btn = document.getElementById('paypalBtn');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Connecting to PayPal...';
+        btn.disabled = true;
+    });
+</script>
+{% endblock %}

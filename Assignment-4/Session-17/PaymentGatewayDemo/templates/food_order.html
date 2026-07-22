@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Food Order — Stripe Payment{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header bg-white border-bottom py-4 mb-4">
+    <div class="container">
+        <h1 class="fw-bold mb-2">Zomato-Style Food Order</h1>
+        <p class="text-muted">Select your food item and pay securely with Stripe Test Mode</p>
+    </div>
+</div>
+
+<div class="container py-4">
+
+    <!-- Error message (if any) -->
+    {% if error %}
+    <div class="alert alert-danger mb-4">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+
+        <!-- LEFT: Food Menu Cards -->
+        <div class="col-lg-8">
+            <h5 class="fw-bold mb-3">Menu Items</h5>
+
+            <div class="row g-3" id="menuGrid">
+                {% for item in menu_items %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="food-card card h-100 border p-3"
+                         id="card-{{ item.id }}"
+                         onclick="selectFood('{{ item.name }}', {{ item.price }}, '{{ item.id }}')"
+                         style="cursor: pointer;">
+
+                        <h6 class="fw-bold mb-1 text-dark">{{ item.name }}</h6>
+                        <div class="fw-bold text-success mb-2">₹{{ item.price }}</div>
+
+                        <div class="selected-badge" id="badge-{{ item.id }}" style="display:none;">
+                            <span class="badge bg-success">✓ Selected</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- RIGHT: Order Summary + Payment Form -->
+        <div class="col-lg-4">
+            <div class="card p-4">
+                <h5 class="fw-bold mb-3 border-bottom pb-2">Your Order</h5>
+
+                <form method="post" action="" id="orderForm">
+                    {% csrf_token %}
+
+                    <!-- Customer Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-control" name="customer_name" placeholder="John Doe" required>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <!-- Selected Food (hidden fields) -->
+                    <input type="hidden" name="food_name" id="selectedFoodName" value="">
+                    <input type="hidden" name="price_per_item" id="selectedFoodPrice" value="">
+
+                    <!-- Quantity -->
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-outline-secondary" onclick="changeQty(-1)">−</button>
+                            <input type="number" class="form-control text-center" name="quantity" id="qtyInput" value="1" min="1" max="10" style="max-width: 80px;" onchange="updateTotal()">
+                            <button type="button" class="btn btn-outline-secondary" onclick="changeQty(1)">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Box -->
+                    <div id="orderSummary" class="bg-light p-3 rounded border mb-3" style="display: none;">
+                        <div class="d-flex justify-content-between mb-1" style="font-size: 0.9rem;">
+                            <span class="text-muted">Item</span>
+                            <span id="summaryItem" class="fw-bold text-dark">—</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1" style="font-size: 0.9rem;">
+                            <span class="text-muted">Price</span>
+                            <span id="summaryPrice" class="text-dark">₹0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1" style="font-size: 0.9rem;">
+                            <span class="text-muted">Quantity</span>
+                            <span id="summaryQty" class="text-dark">1</span>
+                        </div>
+                        <hr class="my-2">
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-bold">Total</span>
+                            <span id="summaryTotal" class="fw-bold text-success">₹0</span>
+                        </div>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <button type="submit" class="btn btn-success w-100 py-2 fs-5" id="stripePayBtn" disabled>
+                        Pay with Stripe
+                    </button>
+
+                    <div class="alert alert-warning mt-3 mb-0" style="font-size: 0.8rem;">
+                        <strong>🧪 Stripe Test Card:</strong><br>
+                        <code>4242 4242 4242 4242</code><br>
+                        Expiry: Any future date | CVV: Any 3 digits
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentPrice = 0;
+    let currentFoodName = '';
+
+    function selectFood(name, price, id) {
+        currentPrice = price;
+        currentFoodName = name;
+
+        document.getElementById('selectedFoodName').value = name;
+        document.getElementById('selectedFoodPrice').value = price;
+
+        document.querySelectorAll('.food-card').forEach(function(card) {
+            card.classList.remove('border-success');
+            card.classList.add('border');
+        });
+
+        document.querySelectorAll('.selected-badge').forEach(function(badge) {
+            badge.style.display = 'none';
+        });
+
+        const selectedCard = document.getElementById('card-' + id);
+        selectedCard.classList.remove('border');
+        selectedCard.classList.add('border-success');
+
+        document.getElementById('badge-' + id).style.display = 'block';
+        document.getElementById('stripePayBtn').disabled = false;
+
+        updateTotal();
+    }
+
+    function changeQty(delta) {
+        const input = document.getElementById('qtyInput');
+        let qty = parseInt(input.value) + delta;
+        if (qty < 1) qty = 1;
+        if (qty > 10) qty = 10;
+        input.value = qty;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        if (!currentFoodName) return;
+
+        const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+        const total = currentPrice * qty;
+
+        document.getElementById('orderSummary').style.display = 'block';
+
+        document.getElementById('summaryItem').textContent = currentFoodName;
+        document.getElementById('summaryPrice').textContent = '₹' + currentPrice;
+        document.getElementById('summaryQty').textContent = qty;
+        document.getElementById('summaryTotal').textContent = '₹' + total;
+
+        document.getElementById('stripePayBtn').textContent = 'Pay ₹' + total + ' with Stripe';
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        const name = document.getElementById('selectedFoodName').value;
+        if (!name) {
+            e.preventDefault();
+            alert('Please select a food item first!');
+            return;
+        }
+        const btn = document.getElementById('stripePayBtn');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Connecting to Stripe...';
+        btn.disabled = true;
+    });
+</script>
+{% endblock %}
