@@ -1,0 +1,102 @@
+<!-- profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Profile - Edit Personal Details & Photo{% endblock %}
+{% block meta_description %}Update your FoodieFinder user profile details, contact information, address, and profile picture.{% endblock %}
+
+{% block content %}
+<section class="container my-5 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card custom-card p-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                        <div class="profile-avatar-container me-4 mb-0">
+                            {% if user_profile.profile_picture %}
+                                <img src="{{ user_profile.profile_picture.url }}" alt="User Profile Avatar" class="profile-avatar">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.png' %}" alt="Default Avatar" class="profile-avatar">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h1 class="h3 fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h1>
+                            <p class="small text-muted mb-2">Username: <strong>@{{ user.username }}</strong></p>
+                            <span class="badge custom-badge"><i class="bi bi-shield-check me-1"></i> Verified User Account</span>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{% url 'profile' %}" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <h2 class="h5 fw-bold mb-3 text-primary"><i class="bi bi-person-lines-fill me-2"></i>Personal Details</h2>
+
+                        <!-- First Name & Last Name -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="id_first_name" class="form-label small fw-semibold">First Name</label>
+                                {{ user_form.first_name }}
+                                {% if user_form.first_name.errors %}
+                                    <div class="text-danger small mt-1">{{ user_form.first_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_last_name" class="form-label small fw-semibold">Last Name</label>
+                                {{ user_form.last_name }}
+                                {% if user_form.last_name.errors %}
+                                    <div class="text-danger small mt-1">{{ user_form.last_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label for="id_email" class="form-label small fw-semibold">Email Address</label>
+                            {{ user_form.email }}
+                            {% if user_form.email.errors %}
+                                <div class="text-danger small mt-1">{{ user_form.email.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <h2 class="h5 fw-bold mb-3 text-primary"><i class="bi bi-card-heading me-2"></i>Contact Information & Photo</h2>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="id_phone" class="form-label small fw-semibold">Phone Number</label>
+                            {{ profile_form.phone }}
+                            {% if profile_form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ profile_form.phone.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label for="id_address" class="form-label small fw-semibold">Address</label>
+                            {{ profile_form.address }}
+                            {% if profile_form.address.errors %}
+                                <div class="text-danger small mt-1">{{ profile_form.address.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Profile Picture Upload -->
+                        <div class="mb-4">
+                            <label for="id_profile_picture" class="form-label small fw-semibold">Profile Picture</label>
+                            {{ profile_form.profile_picture }}
+                            {% if profile_form.profile_picture.errors %}
+                                <div class="text-danger small mt-1">{{ profile_form.profile_picture.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary-gradient px-4">
+                                <i class="bi bi-check-circle me-1"></i> Save Changes
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary px-4 rounded-pill">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

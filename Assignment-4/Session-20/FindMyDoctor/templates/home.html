@@ -1,0 +1,306 @@
+<!-- home.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}FoodieFinder - Explore All Food Varieties & Local Dining Spots{% endblock %}
+{% block meta_description %}Explore all food varieties including Indian, Italian, Japanese, Mexican, American, Chinese, Thai, Mediterranean, and Desserts on FoodieFinder.{% endblock %}
+
+{% block content %}
+<!-- 1. Hero Section -->
+<section class="hero-wrapper text-center animate-fade-in py-5">
+    <div class="container position-relative" style="z-index: 2;">
+        <span class="badge custom-badge mb-3 px-4 py-2 text-uppercase font-heading"><i class="bi bi-shop me-1"></i> Food Variety Explorer</span>
+        <h1 class="display-4 fw-extrabold mb-3">Find & Explore All Food Varieties Near You</h1>
+        <p class="hero-subtitle mb-4 mx-auto lead text-light opacity-90" style="max-width: 750px;">
+            Discover authentic Indian Biryanis, Italian Wood-fired Pizzas, Japanese Sushi, Mexican Tacos, Gourmet Burgers, Chinese Dim Sum, and Delicious Desserts.
+        </p>
+
+        <!-- Quick Search Form -->
+        <div class="card custom-card p-3 mx-auto shadow-lg mb-4" style="max-width: 750px;">
+            <form method="GET" action="{% url 'restaurant_search' %}">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-body border-0"><i class="bi bi-search text-primary fs-5"></i></span>
+                            <input type="text" name="cuisine" class="form-control fw-bold" placeholder="Search Food Variety (e.g. Indian, Pizza)..." value="{{ selected_cuisine }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-body border-0"><i class="bi bi-geo-alt text-danger fs-5"></i></span>
+                            <select name="location" class="form-select fw-bold">
+                                <option value="">All Locations</option>
+                                <option value="Downtown">Downtown</option>
+                                <option value="Westside">Westside</option>
+                                <option value="Eastside">Eastside</option>
+                                <option value="Uptown">Uptown</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary-gradient w-100 py-3 fs-6">
+                            <i class="bi bi-funnel-fill me-1"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'restaurant_search' %}" class="btn btn-light btn-lg px-4 rounded-pill fw-bold text-primary shadow">
+                <i class="bi bi-grid-fill me-2"></i>Browse All Cuisines
+            </a>
+            <a href="{% url 'map' %}" class="btn btn-outline-light btn-lg px-4 rounded-pill fw-bold">
+                <i class="bi bi-geo-alt me-2"></i>Explore Map Pins
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Explore Food Varieties Section -->
+<section class="container my-5 py-4">
+    <div class="text-center mb-5">
+        <span class="badge custom-badge mb-2">Popular Categories</span>
+        <h2 class="fw-bold">Explore All Food Varieties</h2>
+        <p class="text-muted">Choose your favorite cuisine and discover top dining spots</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Variety 1: Indian -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Indian" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🍛</div>
+                    <h3 class="h5 fw-bold mb-1">Indian</h3>
+                    <span class="small text-muted">Biryani, Dosa & Tikka</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 2: Italian -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Italian" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🍕</div>
+                    <h3 class="h5 fw-bold mb-1">Italian</h3>
+                    <span class="small text-muted">Wood-fired Pizza & Pasta</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 3: Japanese -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Japanese" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🍣</div>
+                    <h3 class="h5 fw-bold mb-1">Japanese</h3>
+                    <span class="small text-muted">Sushi, Ramen & Bento</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 4: Mexican -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Mexican" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🌮</div>
+                    <h3 class="h5 fw-bold mb-1">Mexican</h3>
+                    <span class="small text-muted">Tacos, Burritos & Quesadillas</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 5: American -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=American" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🍔</div>
+                    <h3 class="h5 fw-bold mb-1">American</h3>
+                    <span class="small text-muted">Smash Burgers & BBQ</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 6: Chinese -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Chinese" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🥢</div>
+                    <h3 class="h5 fw-bold mb-1">Chinese</h3>
+                    <span class="small text-muted">Dim Sum & Hakka Noodles</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 7: Thai -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Thai" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🍜</div>
+                    <h3 class="h5 fw-bold mb-1">Thai</h3>
+                    <span class="small text-muted">Pad Thai & Green Curry</span>
+                </div>
+            </a>
+        </div>
+        <!-- Variety 8: Desserts -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="{% url 'restaurant_search' %}?cuisine=Desserts" class="text-decoration-none">
+                <div class="card custom-card h-100 p-4 text-center">
+                    <div class="fs-1 mb-2">🍰</div>
+                    <h3 class="h5 fw-bold mb-1">Desserts</h3>
+                    <span class="small text-muted">Cakes, Waffles & Ice Cream</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Top Featured Restaurants Section -->
+<section class="container my-5 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <span class="badge custom-badge mb-1">Top Recommendations</span>
+            <h2 class="h2 fw-bold mb-0">Trending Restaurants & Food Places</h2>
+        </div>
+        <a href="{% url 'restaurant_search' %}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold">
+            View All Places <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% if restaurants %}
+            {% for restaurant in restaurants %}
+                <div class="col-md-4">
+                    <article class="card custom-card h-100">
+                        <img src="{{ restaurant.image_url }}" class="card-img-top restaurant-img" alt="{{ restaurant.name }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge custom-badge">{{ restaurant.cuisine }}</span>
+                                <span class="rating-pill"><i class="bi bi-star-fill me-1"></i>{{ restaurant.rating }}</span>
+                            </div>
+                            <h3 class="h5 card-title fw-bold mt-2 mb-1">{{ restaurant.name }}</h3>
+                            <p class="small text-muted mb-2"><i class="bi bi-geo-alt text-danger me-1"></i>{{ restaurant.location }}</p>
+                            <p class="card-text small text-muted">{{ restaurant.description }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                            <a href="{% url 'map' %}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-semibold">
+                                <i class="bi bi-map me-1"></i> View Location Pin
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No restaurants available.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- 4. Special Offers & Chef's Recommendations -->
+<section class="container my-5 py-4">
+    <div class="card custom-card p-5 border-start border-primary border-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="badge bg-danger text-white mb-2 px-3 py-2 rounded-pill"><i class="bi bi-fire me-1"></i> Daily Highlights</span>
+                <h2 class="fw-bold mb-2">Chef's Special Food Selection</h2>
+                <p class="text-muted lead mb-0">From authentic South Indian Dosas and Royal Hyderabadi Biryanis to Handcrafted Neapolitan Pizzas, enjoy fresh dishes prepared daily across all locations.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'restaurant_search' %}" class="btn btn-primary-gradient px-4 py-3">
+                    <i class="bi bi-search me-1"></i> Explore All Food Specialties
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. How It Works Section -->
+<section class="container my-5 py-4 text-center">
+    <div class="mb-5">
+        <span class="badge custom-badge mb-2">Simple Steps</span>
+        <h2 class="fw-bold">How FoodieFinder Works</h2>
+        <p class="text-muted">Explore food varieties and map locations in three easy steps</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card custom-card p-4 h-100">
+                <div class="text-primary mb-3">
+                    <i class="bi bi-1-circle-fill fs-1"></i>
+                </div>
+                <h3 class="h5 fw-bold">Select Food Variety</h3>
+                <p class="small text-muted mb-0">Choose from Indian, Italian, Japanese, Mexican, American, Chinese, Thai, or Desserts.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card custom-card p-4 h-100">
+                <div class="text-primary mb-3">
+                    <i class="bi bi-2-circle-fill fs-1"></i>
+                </div>
+                <h3 class="h5 fw-bold">Filter Location</h3>
+                <p class="small text-muted mb-0">Filter dining spots by Downtown, Westside, Eastside, or Uptown districts.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card custom-card p-4 h-100">
+                <div class="text-primary mb-3">
+                    <i class="bi bi-3-circle-fill fs-1"></i>
+                </div>
+                <h3 class="h5 fw-bold">View Interactive Maps</h3>
+                <p class="small text-muted mb-0">Pin coordinates on Google Maps with automatic geocoding street address retrieval.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. User Reviews & Community Section -->
+<section class="container my-5 py-4">
+    <div class="text-center mb-5">
+        <span class="badge custom-badge mb-2">Community Reviews</span>
+        <h2 class="fw-bold">What Food Lovers Say</h2>
+        <p class="text-muted">Feedback from students & food explorers</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card custom-card p-4 h-100">
+                <div class="text-warning mb-2">
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p class="small text-muted mb-3">"FoodieFinder made it super easy to find authentic Biryani and Sushi in Downtown. The map geolocation feature works flawlessly!"</p>
+                <div class="fw-bold small">- Rahul Sharma</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card custom-card p-4 h-100">
+                <div class="text-warning mb-2">
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p class="small text-muted mb-3">"I love the one-click theme switcher! Toggling between Midnight Dark and Emerald Luxe looks super clean."</p>
+                <div class="fw-bold small">- Priya Patel</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card custom-card p-4 h-100">
+                <div class="text-warning mb-2">
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p class="small text-muted mb-3">"The OTP password reset system is very fast. Great experience for finding pizza and burger spots!"</p>
+                <div class="fw-bold small">- Alex Johnson</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. Call To Action Footer Banner -->
+<section class="container my-5 py-4">
+    <div class="card custom-card p-5 text-center bg-primary text-white" style="background: var(--hero-bg) !important;">
+        <h2 class="fw-bold mb-3">Ready to Find Your Favorite Food Spot?</h2>
+        <p class="lead mb-4 mx-auto" style="max-width: 600px;">Search dozens of restaurants or drop interactive pins on Google Maps right now.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'restaurant_search' %}" class="btn btn-light btn-lg rounded-pill fw-bold text-primary px-4">
+                <i class="bi bi-search me-2"></i>Search Restaurants
+            </a>
+            <a href="{% url 'map' %}" class="btn btn-outline-light btn-lg rounded-pill fw-bold px-4">
+                <i class="bi bi-geo-alt me-2"></i>Open Map Explorer
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

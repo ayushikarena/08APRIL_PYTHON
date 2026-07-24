@@ -1,0 +1,97 @@
+<!-- restaurant_search.html -->
+{% extends 'base.html' %}
+
+{% block title %}Restaurant Search - Filter by Cuisine & Location | FoodieFinder{% endblock %}
+{% block meta_description %}Search and filter restaurants by cuisine (Indian, Italian, Japanese, Mexican, American, Chinese) and location (Downtown, Westside, Eastside, Uptown).{% endblock %}
+
+{% block content %}
+<section class="container my-5 animate-fade-in">
+    <!-- Page Header -->
+    <div class="text-center mb-4">
+        <h1 class="h2 fw-bold">Search & Filter Restaurants</h1>
+        <p class="small text-muted">Find the perfect dining spot by selecting your preferred cuisine and location</p>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card custom-card p-4 mb-5">
+        <form method="GET" action="{% url 'restaurant_search' %}">
+            <div class="row g-3 align-items-end">
+                <!-- Cuisine Filter -->
+                <div class="col-md-4">
+                    <label for="cuisine-select" class="form-label small fw-semibold"><i class="bi bi-egg-fried me-1 text-primary"></i> Cuisine</label>
+                    <select id="cuisine-select" name="cuisine" class="form-select">
+                        <option value="">All Cuisines</option>
+                        {% for cuisine in cuisines_list %}
+                            <option value="{{ cuisine }}" {% if selected_cuisine == cuisine %}selected{% endif %}>{{ cuisine }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Location Filter -->
+                <div class="col-md-4">
+                    <label for="location-select" class="form-label small fw-semibold"><i class="bi bi-geo-alt me-1 text-danger"></i> Location</label>
+                    <select id="location-select" name="location" class="form-select">
+                        <option value="">All Locations</option>
+                        {% for loc in locations_list %}
+                            <option value="{{ loc }}" {% if selected_location == loc %}selected{% endif %}>{{ loc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-gradient flex-grow-1">
+                        <i class="bi bi-search me-1"></i> Filter Results
+                    </button>
+                    {% if selected_cuisine or selected_location %}
+                        <a href="{% url 'restaurant_search' %}" class="btn btn-outline-secondary rounded-pill" title="Reset Filters">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Grid -->
+    <div class="row g-4">
+        {% if restaurants %}
+            {% for restaurant in restaurants %}
+                <div class="col-md-4">
+                    <article class="card custom-card h-100">
+                        <img src="{{ restaurant.image_url }}" class="card-img-top restaurant-img" alt="{{ restaurant.name }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge custom-badge">{{ restaurant.cuisine }}</span>
+                                <span class="rating-pill"><i class="bi bi-star-fill me-1"></i>{{ restaurant.rating }}</span>
+                            </div>
+                            <h2 class="h5 card-title fw-bold mt-2 mb-1">{{ restaurant.name }}</h2>
+                            <p class="small text-muted mb-2"><i class="bi bi-geo-alt text-danger me-1"></i>{{ restaurant.location }}</p>
+                            <p class="card-text small text-muted">{{ restaurant.description }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                            <a href="{% url 'map' %}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-semibold">
+                                <i class="bi bi-map me-1"></i> View on Google Maps
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        {% else %}
+            <!-- Empty Search Results Alert -->
+            <div class="col-12">
+                <div class="card custom-card p-5 text-center my-3">
+                    <div class="text-muted mb-3">
+                        <i class="bi bi-search-heart fs-1"></i>
+                    </div>
+                    <h2 class="h4 fw-bold mb-2">No restaurants found.</h2>
+                    <p class="small text-muted mb-3">No matching dining places were found for cuisine "{{ selected_cuisine }}" and location "{{ selected_location }}".</p>
+                    <div>
+                        <a href="{% url 'restaurant_search' %}" class="btn btn-primary-gradient btn-sm px-4">View All Restaurants</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

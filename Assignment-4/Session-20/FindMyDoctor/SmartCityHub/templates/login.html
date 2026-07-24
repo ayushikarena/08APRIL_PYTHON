@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Login - {{ PROJECT_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center animate-fade-up" style="min-height: 80vh;">
+    <div class="glass-panel p-5 border-0 shadow-lg" style="max-width: 450px; width: 100%;">
+        <div class="text-center mb-5">
+            <div class="bg-primary-custom text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width: 64px; height: 64px;">
+                <i class="bi bi-box-arrow-in-right fs-2"></i>
+            </div>
+            <h2 class="fw-bolder">Welcome Back</h2>
+            <p class="text-muted small fw-medium">Sign in to your {{ PROJECT_NAME }} account</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="form-label fw-semibold small text-muted">Email Address</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0 border-opacity-25"><i class="bi bi-envelope text-muted"></i></span>
+                    <input type="email" name="email" class="form-control form-control-glass border-start-0 ps-0" placeholder="name@example.com" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary-custom w-100 rounded-pill py-3 fw-bold mb-4 shadow-sm hover-lift">
+                Send OTP
+            </button>
+        </form>
+        
+        <div class="text-center">
+            <p class="text-muted small mb-0 fw-medium">Don't have an account? <a href="{% url 'register' %}" class="text-primary fw-bold text-decoration-none">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
