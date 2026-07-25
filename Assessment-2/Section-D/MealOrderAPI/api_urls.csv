@@ -1,0 +1,4 @@
+Endpoint Name,HTTP Method,URL Path,Description,Required Body/Parameters
+Place Order,POST,"http://127.0.0.1:8000/api/orders/place/",Creates a new food delivery order,"{""customer_name"": ""string"", ""item"": ""string"", ""quantity"": integer (greater than 0)}"
+List Orders,GET,"http://127.0.0.1:8000/api/orders/list/",Retrieves a list of all food delivery orders,None
+Django Admin,GET,"http://127.0.0.1:8000/admin/",Built-in Django administration panel,"Requires Superuser credentials"
