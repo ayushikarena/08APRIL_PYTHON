@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block title %}Restaurant Finder - {{ PROJECT_NAME }}{% endblock %}
+
+{% block extra_css %}
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+    #restaurant-map {
+        height: 400px;
+        width: 100%;
+        border-radius: 1rem;
+        z-index: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-up">
+    <div class="glass-panel p-4 mb-5 border-0 shadow-sm d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <h2 class="fw-bolder mb-0"><i class="bi bi-shop text-primary me-2"></i> Find Your Favorite Food</h2>
+        
+        <form method="get" class="d-flex gap-2 flex-grow-1" style="max-width: 600px;">
+            <input type="text" name="cuisine" class="form-control form-control-glass border-0 shadow-sm" placeholder="Search Cuisine..." value="{{ cuisine }}">
+            <input type="text" name="location" class="form-control form-control-glass border-0 shadow-sm" placeholder="Search Location..." value="{{ location }}">
+            <button type="submit" class="btn btn-primary-custom rounded-pill px-4 shadow-sm hover-lift"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+
+    <!-- Map Section -->
+    <div class="glass-panel p-2 mb-5 border-0 shadow-sm animate-fade-up delay-100">
+        <div id="restaurant-map"></div>
+    </div>
+
+    <div class="row g-4">
+        {% for restaurant in restaurants %}
+        <div class="col-md-4 animate-fade-up delay-{{ forloop.counter0|add:1 }}00">
+            <div class="glass-panel h-100 border-0 shadow-sm overflow-hidden hover-lift p-0 d-flex flex-column">
+                <div class="position-relative">
+                    {% if restaurant.image %}
+                        <img src="{{ restaurant.image.url }}" class="w-100" alt="{{ restaurant.name }}" style="height: 220px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-primary text-white d-flex align-items-center justify-content-center" style="height: 220px; opacity: 0.8;">
+                            <i class="bi bi-image display-1"></i>
+                        </div>
+                    {% endif %}
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
+                        <i class="bi bi-star-fill text-warning"></i> {{ restaurant.rating }}
+                    </span>
+                </div>
+                
+                <div class="card-body p-4 flex-grow-1">
+                    <h4 class="fw-bolder mb-2">{{ restaurant.name }}</h4>
+                    <p class="text-muted small fw-medium mb-3"><i class="bi bi-geo-alt-fill text-danger"></i> {{ restaurant.location }}</p>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-semibold">{{ restaurant.cuisine }}</span>
+                </div>
+                
+                <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                    <a href="{% url 'restaurant_detail' restaurant.pk %}" class="btn btn-primary-custom w-100 rounded-pill py-2 fw-semibold">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-sm" style="width: 100px; height: 100px;">
+                <i class="bi bi-search display-3 text-muted"></i>
+            </div>
+            <h3 class="fw-bolder text-muted">No restaurants found.</h3>
+            <p class="text-muted">Try adjusting your search criteria.</p>
+            <a href="{% url 'restaurant_list' %}" class="btn btn-outline-primary rounded-pill px-4 mt-2 fw-semibold">Clear Filters</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center gap-2">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link rounded-pill border-0 shadow-sm fw-semibold text-primary" href="?page={{ page_obj.previous_page_number }}&cuisine={{ cuisine }}&location={{ location }}"><i class="bi bi-chevron-left"></i></a></li>
+            {% endif %}
+            
+            <li class="page-item active"><span class="page-link bg-primary-custom rounded-pill border-0 shadow-sm fw-bold px-3">{{ page_obj.number }}</span></li>
+            
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link rounded-pill border-0 shadow-sm fw-semibold text-primary" href="?page={{ page_obj.next_page_number }}&cuisine={{ cuisine }}&location={{ location }}"><i class="bi bi-chevron-right"></i></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Map
+        const defaultLocation = [28.6139, 77.2090]; // New Delhi fallback
+        const map = L.map('restaurant-map').setView(defaultLocation, 12);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Collect restaurant data from the rendered cards
+        const restaurants = [];
+        {% for restaurant in restaurants %}
+            restaurants.push({
+                name: "{{ restaurant.name|escapejs }}",
+                location: "{{ restaurant.location|escapejs }}",
+                cuisine: "{{ restaurant.cuisine|escapejs }}",
+                url: "{% url 'restaurant_detail' restaurant.pk %}"
+            });
+        {% endfor %}
+
+        if (restaurants.length > 0) {
+            // Create a bounds object to fit all markers
+            const bounds = L.latLngBounds();
+            
+            // For a production app, coordinates should be in the DB.
+            // Since we only have location names, we will use Nominatim to geocode them dynamically.
+            let markersAdded = 0;
+            
+            restaurants.forEach((rest, index) => {
+                // Add artificial delay to respect Nominatim rate limits (1 req/sec)
+                setTimeout(() => {
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(rest.location)}&limit=1`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                const lat = data[0].lat;
+                                const lon = data[0].lon;
+                                const marker = L.marker([lat, lon]).addTo(map);
+                                marker.bindPopup(`<b>${rest.name}</b><br>${rest.cuisine}<br><a href="${rest.url}" class="btn btn-sm btn-primary mt-2">View</a>`);
+                                
+                                bounds.extend([lat, lon]);
+                                markersAdded++;
+                                
+                                // Fit map to show all markers once they are loaded
+                                if (markersAdded > 0) {
+                                    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+                                }
+                            }
+                        })
+                        .catch(err => console.error("Geocoding error for", rest.location, err));
+                }, index * 1200); // 1.2s delay between requests
+            });
+            
+            // Try to set initial view based on first restaurant's location string immediately
+            if (restaurants[0].location) {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(restaurants[0].location)}&limit=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            map.setView([data[0].lat, data[0].lon], 13);
+                        }
+                    });
+            }
+        }
+        
+        // If the user entered a location in the search bar, center the map there immediately
+        const userSearchedLocation = "{{ location|escapejs }}";
+        if (userSearchedLocation) {
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(userSearchedLocation)}&limit=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        map.setView([data[0].lat, data[0].lon], 13);
+                    }
+                });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,20 @@
+Interview Answer
+
+Token Authentication:
+
+Token Authentication uses a unique token generated for each user after login.
+The client sends this token with every API request.
+It is commonly used for mobile applications and REST APIs because it is stateless.
+
+Session Authentication:
+
+Session Authentication stores user login information on the server.
+After login, the browser stores a session cookie and sends it with every request.
+It is commonly used in traditional web applications.
+
+Difference:
+
+1. Token Authentication is stateless.
+2. Session Authentication is stateful.
+3. Token Authentication is best for APIs and mobile apps.
+4. Session Authentication is best for browser-based web applications.

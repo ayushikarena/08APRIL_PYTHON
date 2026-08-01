@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Flipkart Wishlist</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+
+<body>
+    {% csrf_token %}
+
+<h1>
+
+My Wishlist
+
+</h1>
+
+<div class="container">
+
+{% for product in products %}
+
+<div class="card" id="product{{product.id}}">
+
+<img src="{{product.image}}">
+
+<h2>
+
+{{product.name}}
+
+</h2>
+
+<h3>
+
+₹{{product.price}}
+
+</h3>
+
+<button onclick="removeProduct({{product.id}})">
+    Remove from Wishlist
+</button>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<script>
+function removeProduct(id){
+
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+
+    fetch("/delete/"+id+"/", {
+
+        method: "DELETE",
+
+        headers:{
+            "X-CSRFToken": csrftoken
+        }
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        console.log(data);
+
+        if(data.success){
+
+            document.getElementById("product"+id).remove();
+
+        }
+        else{
+            alert(data.message);
+        }
+
+    })
+
+}
+
+</script>
+
+</body>
+
+</html>

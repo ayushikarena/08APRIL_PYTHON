@@ -1,0 +1,8 @@
+Endpoint Name,URL,Method,Description,Example URL
+Category List,http://127.0.0.1:8000/api/categories/,GET,Returns a JSON array of all Category records,http://127.0.0.1:8000/api/categories/
+Menu Items List,http://127.0.0.1:8000/api/menu-items/,GET,List all menu items,http://127.0.0.1:8000/api/menu-items/
+Menu Items Create,http://127.0.0.1:8000/api/menu-items/,POST,Create a new menu item,http://127.0.0.1:8000/api/menu-items/
+Menu Item Retrieve,http://127.0.0.1:8000/api/menu-items/<int:id>/,GET,Retrieve a single menu item by ID,http://127.0.0.1:8000/api/menu-items/1/
+Menu Item Update (PUT),http://127.0.0.1:8000/api/menu-items/<int:id>/,PUT,Update/replace a menu item by ID,http://127.0.0.1:8000/api/menu-items/1/
+Menu Item Delete,http://127.0.0.1:8000/api/menu-items/<int:id>/,DELETE,Delete a menu item by ID,http://127.0.0.1:8000/api/menu-items/1/
+Django Admin,http://127.0.0.1:8000/admin/,GET/POST,Access the Django admin dashboard,http://127.0.0.1:8000/admin/

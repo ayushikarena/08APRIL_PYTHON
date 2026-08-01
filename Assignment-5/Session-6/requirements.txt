@@ -1,0 +1,9 @@
+Django
+djangorestframework
+requests
+twilio
+stripe
+python-dotenv
+django-allauth
+djangorestframework-simplejwt
+django-filter

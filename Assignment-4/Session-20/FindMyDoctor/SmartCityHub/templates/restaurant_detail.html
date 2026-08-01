@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ restaurant.name }} - {{ PROJECT_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-up">
+    <div class="glass-panel border-0 shadow-lg overflow-hidden position-relative">
+        <div class="position-absolute top-0 start-0 w-100" style="height: 250px; background: linear-gradient(135deg, rgba(79,70,229,0.1), rgba(14,165,233,0.1)); z-index: 0;"></div>
+        
+        <div class="position-relative z-index-1 p-5 d-flex flex-column align-items-center">
+            
+            {% if restaurant.image %}
+                <img src="{{ restaurant.image.url }}" class="rounded-4 shadow-lg mb-4 hover-lift" alt="{{ restaurant.name }}" style="width: 100%; max-width: 800px; height: 400px; object-fit: cover; border: 4px solid white;">
+            {% else %}
+                <div class="bg-primary text-white rounded-4 shadow-lg mb-4 d-flex align-items-center justify-content-center hover-lift" style="width: 100%; max-width: 800px; height: 400px; border: 4px solid white;">
+                    <i class="bi bi-image display-1"></i>
+                </div>
+            {% endif %}
+            
+            <div class="text-center" style="max-width: 800px; width: 100%;">
+                <h1 class="display-4 fw-bolder mb-3">{{ restaurant.name }}</h1>
+                <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
+                    <span class="badge bg-warning text-dark px-4 py-2 rounded-pill fs-5 shadow-sm fw-bold"><i class="bi bi-star-fill me-1"></i> {{ restaurant.rating }}</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-4 py-2 rounded-pill fs-5 fw-bold"><i class="bi bi-tags-fill me-1"></i> {{ restaurant.cuisine }}</span>
+                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-4 py-2 rounded-pill fs-5 fw-bold"><i class="bi bi-geo-alt-fill me-1"></i> {{ restaurant.location }}</span>
+                </div>
+                
+                <hr class="opacity-10 my-5">
+                
+                <h3 class="fw-bolder mb-4 text-start">About</h3>
+                <p class="lead text-muted text-start" style="white-space: pre-wrap; font-weight: 400; line-height: 1.8;">{{ restaurant.description }}</p>
+                
+                <div class="mt-5 text-start">
+                    <a href="{% url 'restaurant_list' %}" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold hover-lift"><i class="bi bi-arrow-left me-2"></i> Back to Directory</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

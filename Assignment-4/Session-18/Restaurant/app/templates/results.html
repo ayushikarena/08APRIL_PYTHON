@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nearby Pickup Points Results</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Flipkart Pickup Points - Sorted Results</h1>
+        
+        <p><strong>Your Location:</strong> {{ user_address }} (Lat: {{ user_latitude }}, Lng: {{ user_longitude }})</p>
+        
+        {% if warning_message %}
+            <div class="warning-box" style="background-color: #fff9db; border: 1px solid #ffe066; color: #f59f00; padding: 12px; border-radius: 4px; margin: 15px 0;">
+                <p style="margin: 0; font-weight: bold;">{{ warning_message }}</p>
+            </div>
+        {% endif %}
+        
+        <!-- Table displaying sorted pickup points -->
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Pickup Point</th>
+                    <th>Address</th>
+                    <th>Distance (KM)</th>
+                    <th>Coordinates (Lat, Lng)</th>
+                    <th>Google Map</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for point in pickup_points %}
+                    <tr>
+                        <td><strong>{{ point.name }}</strong></td>
+                        <td>{{ point.address }}</td>
+                        <td><span class="distance-badge">{{ point.distance }} KM</span></td>
+                        <td>{{ point.latitude }}, {{ point.longitude }}</td>
+                        <td>
+                            <div class="small-map">
+                                <iframe
+                                    width="250"
+                                    height="180"
+                                    frameborder="0"
+                                    style="border:1px solid #ccc;"
+                                    src="{{ point.map_url }}"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <br>
+        <a href="{% url 'search_distance' %}" class="back-link">Search Another Address</a>
+        <a href="{% url 'home' %}" class="back-link" style="margin-left: 10px;">Back to Home</a>
+    </div>
+</body>
+</html>

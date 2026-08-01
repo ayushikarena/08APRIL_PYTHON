@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Home — Payment Gateway Demo{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section (Simple & Clean) -->
+<section class="py-5 text-center bg-white border-bottom">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3 text-dark">
+            Payment Gateway Integration
+        </h1>
+        <p class="lead text-muted mx-auto" style="max-width: 600px;">
+            A simple Django project demonstrating Paytm, Stripe, and PayPal payment gateways with sandbox and test mode integration.
+        </p>
+    </div>
+</section>
+
+<!-- Gateway Cards Section -->
+<section class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-4 fw-bold">Select a Payment Option</h3>
+        <div class="row g-4">
+
+            <!-- Paytm Card -->
+            <div class="col-md-4">
+                <div class="card h-100 bg-white border">
+                    <div class="card-body p-4 text-center">
+                        <h4 class="card-title fw-bold mb-3 text-dark">IPL Ticket Booking</h4>
+                        <p class="card-text text-muted mb-4">
+                            Book IPL match tickets. Form data is saved to SQLite. Payment is processed using Paytm Sandbox.
+                        </p>
+                        <a href="{% url 'payments:book_ticket' %}" class="btn btn-outline-primary w-100">
+                            Book Tickets
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stripe Card -->
+            <div class="col-md-4">
+                <div class="card h-100 bg-white border">
+                    <div class="card-body p-4 text-center">
+                        <h4 class="card-title fw-bold mb-3 text-dark">Food Order</h4>
+                        <p class="card-text text-muted mb-4">
+                            Order food items from a menu. Payment is processed using Stripe Test Mode Checkout Session.
+                        </p>
+                        <a href="{% url 'payments:food_order' %}" class="btn btn-outline-success w-100">
+                            Order Food
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PayPal Card -->
+            <div class="col-md-4">
+                <div class="card h-100 bg-white border">
+                    <div class="card-body p-4 text-center">
+                        <h4 class="card-title fw-bold mb-3 text-dark">PayPal Sandbox</h4>
+                        <p class="card-text text-muted mb-4">
+                            Perform standard PayPal payments. Create and capture sandbox orders.
+                        </p>
+                        <a href="{% url 'payments:paypal_pay' %}" class="btn btn-outline-warning w-100">
+                            Pay with PayPal
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- How it Works Section -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+        <h4 class="text-center fw-bold mb-4">How it Works</h4>
+        <div class="row g-3 justify-content-center">
+            
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">1</div>
+                    <small class="text-secondary fw-semibold">Fill Form</small>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><span class="text-muted fs-4">&rarr;</span></div>
+
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">2</div>
+                    <small class="text-secondary fw-semibold">Save to DB</small>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><span class="text-muted fs-4">&rarr;</span></div>
+
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">3</div>
+                    <small class="text-secondary fw-semibold">Call Gateway API</small>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><span class="text-muted fs-4">&rarr;</span></div>
+
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">4</div>
+                    <small class="text-secondary fw-semibold">Redirect to Payment</small>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><span class="text-muted fs-4">&rarr;</span></div>
+
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">5</div>
+                    <small class="text-secondary fw-semibold">Callback Received</small>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><span class="text-muted fs-4">&rarr;</span></div>
+
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">6</div>
+                    <small class="text-secondary fw-semibold">Verify & Update DB</small>
+                </div>
+            </div>
+            <div class="col-auto d-flex align-items-center"><span class="text-muted fs-4">&rarr;</span></div>
+
+            <div class="col-auto">
+                <div class="p-3 border rounded text-center bg-light" style="min-width: 120px;">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 30px; height: 30px; font-size: 0.85rem; font-weight: bold;">7</div>
+                    <small class="text-secondary fw-semibold">Show Result</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Setup & testing Credentials -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card p-4 bg-white border">
+                    <h5 class="fw-bold mb-3">Quick Start Commands</h5>
+                    <pre class="bg-light p-3 rounded text-dark border" style="font-size: 0.85rem;"># Install dependencies
+pip install -r requirements.txt
+
+# Create database tables
+python manage.py makemigrations
+python manage.py migrate
+
+# Create admin user
+python manage.py createsuperuser
+
+# Start development server
+python manage.py runserver</pre>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 bg-white border">
+                    <h5 class="fw-bold mb-3">Test Cards / Accounts</h5>
+                    <table class="table table-bordered table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Gateway</th>
+                                <th>Test Information</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Stripe Card</td>
+                                <td><code>4242 4242 4242 4242</code> (Any expiry/CVV)</td>
+                            </tr>
+                            <tr>
+                                <td>PayPal</td>
+                                <td>Use Sandbox Buyer account login credentials</td>
+                            </tr>
+                            <tr>
+                                <td>Paytm</td>
+                                <td>Use Paytm Developer Portal Sandbox credentials</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

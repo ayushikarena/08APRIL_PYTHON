@@ -1,0 +1,11 @@
+No,Operation,Method,URL
+1,List All Orders,GET,http://127.0.0.1:8001/api/orders/
+2,List Orders Page 2,GET,http://127.0.0.1:8001/api/orders/?page=2
+3,Filter Pending Orders,GET,http://127.0.0.1:8001/api/orders/?status=pending
+4,Filter Confirmed Orders,GET,http://127.0.0.1:8001/api/orders/?status=confirmed
+5,Filter Delivered Orders,GET,http://127.0.0.1:8001/api/orders/?status=delivered
+6,Create New Order,POST,http://127.0.0.1:8001/api/orders/create/
+7,Retrieve Order ID=11,GET,http://127.0.0.1:8001/api/orders/retrieve/11/
+8,Full Update Order ID=11,PUT,http://127.0.0.1:8001/api/orders/update/11/
+9,Partial Update Order ID=11,PATCH,http://127.0.0.1:8001/api/orders/partial-update/11/
+10,Delete Order ID=11,DELETE,http://127.0.0.1:8001/api/orders/delete/11/

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maps & Geolocation</title>
+    <!-- Include the custom student style sheet -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Maps & Geolocation</h1>
+        <p>Welcome. Below are the links to access different pages created for this session.</p>
+        
+        <h2>Available Features</h2>
+        <table class="home-table">
+            <thead>
+                <tr>
+                    <th>Feature Description</th>
+                    <th>Action Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Find and View a Restaurant Location on Google Map (Task 2)</td>
+                    <td><a href="{% url 'restaurant_map' %}" class="btn-link">Go to Restaurant Map</a></td>
+                </tr>
+                <tr>
+                    <td>Search Flipkart Pickup Points near your location and sort by distance (Task 4)</td>
+                    <td><a href="{% url 'search_distance' %}" class="btn-link">Go to Distance Search</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

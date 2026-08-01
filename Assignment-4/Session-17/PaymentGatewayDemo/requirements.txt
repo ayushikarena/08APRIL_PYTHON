@@ -1,0 +1,32 @@
+# ============================================================
+# requirements.txt
+# ============================================================
+# This file lists all the Python packages this project needs.
+# Install everything at once with:
+#   pip install -r requirements.txt
+# ============================================================
+
+# Django - the main web framework we are using
+# Version 5+ is required (we have Django 6 installed)
+django>=5.0
+
+# python-decouple - reads secret keys from a .env file
+# So we NEVER hardcode passwords or API keys in our code
+python-decouple==3.8
+
+# stripe - Official Stripe Python SDK
+# Used for Task 4: Food Order payment via Stripe
+stripe==15.3.1
+
+# paypalrestsdk - Official PayPal REST SDK
+# Used for Task 5: PayPal payment integration
+paypalrestsdk==1.13.3
+
+# paytmchecksum - Official Paytm checksum utility
+# Used for Task 2: Paytm payment integration
+# This library creates and verifies security signatures
+paytmchecksum==1.7.0
+
+# pycryptodome - Required by paytmchecksum internally
+# Provides the 'Crypto' module for AES encryption used by Paytm
+pycryptodome==3.23.0

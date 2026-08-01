@@ -1,0 +1,6 @@
+Endpoint,HTTP Method,Action,Description,Direct URL Link
+/api/menu-items/,GET,List Items,Returns a list of all menu items,http://127.0.0.1:8000/api/menu-items/
+/api/menu-items/,POST,Create Item,Creates a new menu item,http://127.0.0.1:8000/api/menu-items/
+/api/menu-items/<id>/,GET,Retrieve Item,Returns details of a specific menu item,http://127.0.0.1:8000/api/menu-items/1/
+/api/menu-items/<id>/,PUT,Update Item,Updates an existing menu item completely,http://127.0.0.1:8000/api/menu-items/1/
+/api/menu-items/<id>/,DELETE,Delete Item,Deletes an existing menu item from the database,http://127.0.0.1:8000/api/menu-items/1/
