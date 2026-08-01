@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% block title %}Book a Cab - {{ PROJECT_NAME }}{% endblock %}
+
+{% block extra_css %}
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+    #map {
+        height: 500px;
+        width: 100%;
+        border-radius: 1rem;
+        z-index: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-up">
+    <div class="glass-panel p-4 p-md-5 border-0 shadow-lg">
+        <h3 class="fw-bolder mb-4 text-center"><i class="bi bi-geo-alt-fill text-success me-2"></i> Select Pickup Location</h3>
+        <div class="row g-4">
+            <div class="col-md-8 mb-4 mb-md-0">
+                <!-- Search Box for Map -->
+                <div class="input-group mb-3 shadow-sm rounded-pill overflow-hidden">
+                    <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="map-search-input" class="form-control border-0 py-3" placeholder="Search for a specific place or area (e.g. Times Square)..." onkeypress="if(event.key === 'Enter') { searchMapLocation(); event.preventDefault(); }">
+                    <button class="btn btn-primary-custom px-4 fw-bold" type="button" onclick="searchMapLocation()">Search Map</button>
+                </div>
+                
+                <div class="p-2 bg-white rounded-4 shadow-sm" style="border: 1px solid rgba(0,0,0,0.05);">
+                    <div id="map"></div>
+                </div>
+                <p class="text-muted mt-3 small fw-medium text-center"><i class="bi bi-info-circle me-1"></i> Search a place, click on the map, or use your current location to set the pickup point.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-panel bg-white bg-opacity-50 p-4 h-100 border-0 shadow-sm d-flex flex-column">
+                    <h5 class="fw-bold mb-4">Location Details</h5>
+                    <button type="button" class="btn btn-outline-primary rounded-pill w-100 mb-4 fw-semibold hover-lift" onclick="getCurrentLocation()">
+                        <i class="bi bi-crosshair me-2"></i> Use Current Location
+                    </button>
+                    
+                    <form method="post" class="flex-grow-1 d-flex flex-column">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold text-uppercase">Latitude</label>
+                            <input type="text" id="latitude" name="latitude" class="form-control form-control-glass bg-white bg-opacity-75 fw-medium" readonly required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold text-uppercase">Longitude</label>
+                            <input type="text" id="longitude" name="longitude" class="form-control form-control-glass bg-white bg-opacity-75 fw-medium" readonly required>
+                        </div>
+                        <div class="mb-4 flex-grow-1">
+                            <label class="form-label text-muted small fw-bold text-uppercase">Selected Address</label>
+                            <textarea id="address" name="address" class="form-control form-control-glass bg-white bg-opacity-75 fw-medium" rows="4" readonly required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg w-100 rounded-pill fw-bold shadow hover-lift mt-auto">
+                            <i class="bi bi-car-front me-2"></i> Confirm Pickup
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+    let map;
+    let marker;
+
+    function initMap() {
+        const defaultLocation = [28.6139, 77.2090]; // New Delhi
+        map = L.map('map').setView(defaultLocation, 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        map.on('click', function(e) {
+            placeMarkerAndPanTo(e.latlng);
+        });
+    }
+
+    function placeMarkerAndPanTo(latLng) {
+        if (marker) {
+            marker.setLatLng(latLng);
+        } else {
+            marker = L.marker(latLng).addTo(map);
+        }
+        map.panTo(latLng);
+        updateLocationDetails(latLng.lat, latLng.lng);
+    }
+
+    function updateLocationDetails(lat, lng) {
+        document.getElementById("latitude").value = lat.toFixed(6);
+        document.getElementById("longitude").value = lng.toFixed(6);
+        document.getElementById("address").value = "Fetching address...";
+
+        // Reverse Geocoding using Nominatim API (Free)
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.display_name) {
+                    document.getElementById("address").value = data.display_name;
+                } else {
+                    document.getElementById("address").value = "Address not found";
+                }
+            })
+            .catch(err => {
+                console.error("Geocoding failed:", err);
+                document.getElementById("address").value = "Error fetching address";
+            });
+    }
+
+    function getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = L.latLng(position.coords.latitude, position.coords.longitude);
+                    placeMarkerAndPanTo(pos);
+                },
+                () => {
+                    alert("Error: The Geolocation service failed.");
+                }
+            );
+        } else {
+            alert("Error: Your browser doesn't support geolocation.");
+        }
+    }
+
+    function searchMapLocation() {
+        const query = document.getElementById('map-search-input').value;
+        if (!query) return;
+        
+        document.getElementById("address").value = "Searching...";
+        
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const pos = L.latLng(data[0].lat, data[0].lon);
+                    map.setView(pos, 15);
+                    placeMarkerAndPanTo(pos);
+                } else {
+                    alert("Location not found. Please try a different search term.");
+                    document.getElementById("address").value = "";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Error searching for location.");
+            });
+    }
+
+    window.onload = initMap;
+</script>
+{% endblock %}

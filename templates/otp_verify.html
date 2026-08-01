@@ -1,0 +1,47 @@
+<!-- otp_verify.html -->
+{% extends 'base.html' %}
+
+{% block title %}Verify 6-Digit OTP - FoodieFinder Account Activation{% endblock %}
+{% block meta_description %}Enter your 6-digit email OTP code to verify your identity and activate your FoodieFinder account.{% endblock %}
+
+{% block content %}
+<section class="container my-5 animate-fade-in">
+    <div class="card custom-card auth-card p-4 mx-auto text-center" style="max-width: 480px;">
+        <div class="card-body">
+            <div class="mb-3">
+                <i class="bi bi-shield-check fs-1 text-success"></i>
+                <h1 class="h3 fw-bold mt-2">
+                    {% if purpose == 'registration' %}Activate Your Account{% else %}Password Reset Verification{% endif %}
+                </h1>
+                <p class="small text-muted mb-1">A 6-digit OTP code was sent to: <strong class="text-primary">{{ email }}</strong></p>
+                <span class="badge custom-badge my-2 px-3 py-2">
+                    <i class="bi bi-clock-history me-1"></i> Valid for exactly 3 minutes
+                </span>
+            </div>
+
+            <form method="POST" action="{% url 'otp_verify' %}" novalidate>
+                {% csrf_token %}
+
+                <!-- OTP Code -->
+                <div class="mb-4 text-start">
+                    <label for="id_otp_code" class="form-label small fw-semibold text-center d-block">Enter 6-Digit OTP</label>
+                    {{ form.otp_code }}
+                    {% if form.otp_code.errors %}
+                        <div class="text-danger small mt-1 text-center">{{ form.otp_code.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary-gradient w-100 py-3">
+                    <i class="bi bi-patch-check-fill me-1"></i> Verify OTP & Activate Account
+                </button>
+            </form>
+
+            <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center small">
+                <a href="{% url 'forgot_password' %}" class="text-decoration-none text-primary"><i class="bi bi-arrow-clockwise me-1"></i> Resend OTP Code</a>
+                <a href="{% url 'login' %}" class="text-decoration-none text-muted">Back to Login</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

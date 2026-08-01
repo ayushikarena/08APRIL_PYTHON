@@ -1,0 +1,28 @@
+<!-- footer.html -->
+<footer class="custom-footer mt-auto">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <a class="navbar-brand d-flex align-items-center mb-2" href="{% url 'home' %}">
+                    <i class="bi bi-shop-window text-primary me-2 fs-3"></i>
+                    <span class="gradient-text fs-4 fw-bold">FoodieFinder</span>
+                </a>
+            </div>
+            <div class="col-lg-6 text-lg-end">
+                <ul class="list-inline mb-0 small">
+                    <li class="list-inline-item me-3"><a href="{% url 'home' %}" class="text-decoration-none text-reset">Home</a></li>
+                    <li class="list-inline-item me-3"><a href="{% url 'restaurant_search' %}" class="text-decoration-none text-reset">Search Restaurants</a></li>
+                    <li class="list-inline-item me-3"><a href="{% url 'map' %}" class="text-decoration-none text-reset">Maps Explorer</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="list-inline-item"><a href="{% url 'dashboard' %}" class="text-decoration-none text-reset">Dashboard</a></li>
+                    {% else %}
+                        <li class="list-inline-item"><a href="{% url 'login' %}" class="text-decoration-none text-reset">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="pt-3 border-top text-center small">
+            <p class="mb-0 text-muted">&copy; 2026 FoodieFinder. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>

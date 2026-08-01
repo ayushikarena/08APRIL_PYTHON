@@ -1,0 +1,414 @@
+/* style.css */
+/* Opposite Font Color System: Ultra-Deep Obsidian (#090d16) on Light / Pure White (#ffffff) on Dark */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+/* ==========================================================================
+   BUTTON 1: BACKGROUND MODES (Light vs Black)
+   ========================================================================== */
+
+/* Light Background Mode -> OPPOSITE FONT: Ultra-Deep Obsidian Text (#090d16) */
+:root, [data-bg="light"] {
+    --bg-body: #f8fafc;
+    --text-primary: #090d16;
+    --text-secondary: #090d16;
+    --text-muted: #1e293b;
+    --card-bg: #ffffff;
+    --card-border: #cbd5e1;
+    --card-shadow: 0 10px 35px -10px rgba(9, 13, 22, 0.12);
+    --navbar-bg: #ffffff;
+    --navbar-text: #090d16;
+    --hero-bg: linear-gradient(135deg, #090d16 0%, #1e293b 100%);
+    --hero-text: #ffffff;
+    --footer-bg: #ffffff;
+    --input-bg: #ffffff;
+    --input-text: #090d16;
+}
+
+/* Black Background Mode -> OPPOSITE FONT: Crisp Brilliant Pure White Text (#ffffff) */
+[data-bg="dark"] {
+    --bg-body: #090d16;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #f8fafc;
+    --card-bg: #111827;
+    --card-border: #374151;
+    --card-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.85);
+    --navbar-bg: #0f172a;
+    --navbar-text: #ffffff;
+    --hero-bg: linear-gradient(135deg, #1e1b4b 0%, #090d16 100%);
+    --hero-text: #ffffff;
+    --footer-bg: #0f172a;
+    --input-bg: #1f2937;
+    --input-text: #ffffff;
+}
+
+/* ==========================================================================
+   BUTTON 2: COLOR ACCENT PALETTES
+   ========================================================================== */
+
+/* 1. Indigo Palette */
+:root, [data-palette="indigo"] {
+    --accent-color: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+    --accent-glow: rgba(99, 102, 241, 0.45);
+    --badge-bg: #e0e7ff;
+    --badge-text: #1e1b4b;
+}
+
+/* 2. Emerald Palette */
+[data-palette="emerald"] {
+    --accent-color: #10b981;
+    --accent-hover: #059669;
+    --accent-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+    --accent-glow: rgba(16, 185, 129, 0.45);
+    --badge-bg: #d1fae5;
+    --badge-text: #022c22;
+}
+
+/* 3. Ocean Palette */
+[data-palette="ocean"] {
+    --accent-color: #0284c7;
+    --accent-hover: #0369a1;
+    --accent-gradient: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+    --accent-glow: rgba(56, 189, 248, 0.45);
+    --badge-bg: #e0f2fe;
+    --badge-text: #0c4a6e;
+}
+
+/* 4. Sunset Palette */
+[data-palette="sunset"] {
+    --accent-color: #d97706;
+    --accent-hover: #b45309;
+    --accent-gradient: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
+    --accent-glow: rgba(245, 158, 11, 0.45);
+    --badge-bg: #fef3c7;
+    --badge-text: #451a03;
+}
+
+/* 5. Cyber Palette */
+[data-palette="cyber"] {
+    --accent-color: #9333ea;
+    --accent-hover: #7e22ce;
+    --accent-gradient: linear-gradient(135deg, #9333ea 0%, #c084fc 50%, #f0abfc 100%);
+    --accent-glow: rgba(192, 132, 252, 0.45);
+    --badge-bg: #f3e8ff;
+    --badge-text: #3b0764;
+}
+
+/* Dark mode badge text adjustments */
+[data-bg="dark"] {
+    --badge-bg: rgba(255, 255, 255, 0.15);
+    --badge-text: #ffffff;
+}
+
+/* ==========================================================================
+   GLOBAL HIGH-CONTRAST TYPOGRAPHY
+   ========================================================================== */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-primary) !important;
+    font-size: 1.15rem;
+    line-height: 1.65;
+    transition: background-color 0.35s ease, color 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: var(--text-primary) !important;
+    line-height: 1.25;
+}
+
+h1, .h1 { font-size: 2.75rem; }
+h2, .h2 { font-size: 2.15rem; }
+h3, .h3 { font-size: 1.7rem; }
+h4, .h4 { font-size: 1.45rem; }
+h5, .h5 { font-size: 1.25rem; }
+h6, .h6 { font-size: 1.1rem; }
+
+p, span, label, div, td, th, li, a {
+    color: var(--text-primary);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.small, small {
+    font-size: 0.95rem !important;
+}
+
+.display-4 {
+    font-size: 3.6rem !important;
+    line-height: 1.15;
+    font-weight: 900;
+}
+
+/* Gradient Text Highlight */
+.gradient-text {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   CARDS & CONTAINERS
+   ========================================================================== */
+
+.glass-card, .custom-card, .card {
+    background-color: var(--card-bg) !important;
+    border: 2px solid var(--card-border) !important;
+    border-radius: 22px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.35s ease;
+    color: var(--text-primary) !important;
+}
+
+.glass-card:hover, .custom-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px -10px var(--accent-glow);
+    border-color: var(--accent-color) !important;
+}
+
+/* Navbar Custom Styling */
+.navbar-custom {
+    background-color: var(--navbar-bg) !important;
+    border-bottom: 2px solid var(--card-border);
+    transition: background-color 0.35s ease;
+}
+
+.navbar-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.9rem;
+    color: var(--navbar-text) !important;
+}
+
+.nav-link {
+    color: var(--navbar-text) !important;
+    font-weight: 700;
+    font-size: 1.12rem;
+    opacity: 0.95;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    opacity: 1;
+    color: var(--accent-color) !important;
+}
+
+/* Button 1: Background Toggle (Icon Only) */
+.btn-bg-toggle {
+    background: var(--card-bg);
+    color: var(--text-primary) !important;
+    border: 2px solid var(--card-border);
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-bg-toggle:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.08);
+}
+
+/* Button 2: Color Palette Switcher (Icon Only) */
+.btn-palette-toggle {
+    background: var(--accent-gradient);
+    color: #ffffff !important;
+    border: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px var(--accent-glow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-palette-toggle:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 25px var(--accent-glow);
+}
+
+/* Floating Toast Banner */
+.theme-toast-banner {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent-gradient);
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    box-shadow: 0 10px 30px var(--accent-glow);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.theme-toast-banner.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hero Banner */
+.hero-wrapper {
+    background: var(--hero-bg);
+    color: var(--hero-text) !important;
+    padding: 95px 0 75px 0;
+    border-radius: 0 0 35px 35px;
+    box-shadow: 0 15px 35px -10px var(--accent-glow);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-wrapper h1, .hero-wrapper p, .hero-wrapper span {
+    color: #ffffff !important;
+}
+
+/* Profile Avatar Frame & Image Control */
+.profile-avatar-container {
+    width: 140px !important;
+    height: 140px !important;
+    margin: 0 auto 15px auto;
+    position: relative;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    border: 4px solid var(--accent-color) !important;
+    box-shadow: 0 8px 25px var(--accent-glow) !important;
+}
+
+.profile-avatar {
+    width: 140px !important;
+    height: 140px !important;
+    max-width: 140px !important;
+    max-height: 140px !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    display: block !important;
+}
+
+/* Badges & Pills */
+.custom-badge {
+    background-color: var(--badge-bg);
+    color: var(--badge-text) !important;
+    font-weight: 700;
+    font-size: 0.98rem;
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 1px solid var(--card-border);
+}
+
+.rating-pill {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff !important;
+    font-weight: 800;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.98rem;
+}
+
+/* High-Contrast Forms & Inputs */
+.form-control, .form-select {
+    background-color: var(--input-bg) !important;
+    border: 2px solid var(--card-border) !important;
+    color: var(--input-text) !important;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.form-control::placeholder {
+    color: var(--input-text) !important;
+    opacity: 0.8 !important;
+    font-weight: 600;
+}
+
+.form-select option {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    font-weight: 700;
+}
+
+.input-group-text {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--card-border) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 0.25rem var(--accent-glow) !important;
+}
+
+.btn-primary-gradient {
+    background: var(--accent-gradient);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 32px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px var(--accent-glow);
+}
+
+/* Google Map Container */
+#map {
+    width: 100%;
+    height: 500px;
+    border-radius: 20px;
+}
+
+/* Footer Custom */
+footer.custom-footer {
+    background-color: var(--footer-bg);
+    border-top: 2px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 45px 0 25px 0;
+    margin-top: auto;
+    transition: background-color 0.35s ease;
+}
+
+/* CSS Keyframe Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

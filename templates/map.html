@@ -1,0 +1,73 @@
+<!-- map.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Interactive Maps Explorer - FoodieFinder Location Service{% endblock %}
+{% block meta_description %}Use OpenStreetMap & Google Maps API with HTML5 Geolocation to detect your position, drop marker pins, and view reverse geocoded address details.{% endblock %}
+
+{% block extra_head %}
+<!-- Leaflet.js CSS CDN for keyless, 100% reliable interactive map display -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+{% endblock %}
+
+{% block content %}
+<section class="container my-5 animate-fade-in">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Interactive Maps Explorer</h1>
+            <p class="small text-muted mb-0">Click anywhere on the map or drag the pin marker to retrieve live address details.</p>
+        </div>
+        <button onclick="fetchCurrentLocation()" class="btn btn-primary-gradient btn-sm">
+            <i class="bi bi-crosshair me-1"></i> Detect My Geolocation
+        </button>
+    </div>
+
+    <!-- Status Banner -->
+    <div id="location-status" class="alert alert-info py-2 px-3 small rounded-pill mb-3 border-0 glass-card">
+        <i class="bi bi-info-circle me-1"></i> Initializing Interactive Map engine...
+    </div>
+
+    <div class="row g-4">
+        <!-- Interactive Map Container -->
+        <div class="col-lg-8">
+            <div class="card custom-card p-2">
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <!-- Coordinates & Reverse Geocoded Panel -->
+        <div class="col-lg-4">
+            <div class="card custom-card p-4 h-100 d-flex flex-column">
+                <h2 class="h5 fw-bold mb-3"><i class="bi bi-pin-map-fill text-primary me-2"></i>Location Coordinates</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label small text-muted fw-semibold mb-1">LATITUDE</label>
+                    <div class="p-3 bg-body rounded font-monospace fs-5 text-primary border" id="latitude">--</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small text-muted fw-semibold mb-1">LONGITUDE</label>
+                    <div class="p-3 bg-body rounded font-monospace fs-5 text-primary border" id="longitude">--</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small text-muted fw-semibold mb-1">REVERSE GEOCODED ADDRESS</label>
+                    <div class="p-3 bg-body rounded small text-body border" id="address" style="min-height: 90px;">
+                        Click on the map or drag the marker to fetch real address details.
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Leaflet.js Script CDN -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- Custom Map Logic JS -->
+<script src="{% static 'js/map.js' %}"></script>
+{% endblock %}

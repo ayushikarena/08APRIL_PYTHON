@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - {{ PROJECT_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-up">
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bolder mb-1">My Dashboard</h2>
+            <p class="text-muted fw-medium">Welcome back, {{ user.username }}!</p>
+        </div>
+        <a href="{% url 'view_profile' %}" class="btn btn-outline-primary rounded-pill px-4 fw-semibold hover-lift"><i class="bi bi-person me-2"></i>View Profile</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 animate-fade-up delay-100">
+            <div class="glass-panel p-5 h-100 border-0 shadow-sm hover-lift">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow" style="width: 50px; height: 50px;">
+                        <i class="bi bi-person-lines-fill fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-0">Profile Overview</h4>
+                </div>
+                
+                <div class="mb-3">
+                    <span class="text-muted small fw-semibold text-uppercase">Username</span>
+                    <p class="fs-5 fw-medium">{{ user.username }}</p>
+                </div>
+                <div class="mb-4">
+                    <span class="text-muted small fw-semibold text-uppercase">Email Address</span>
+                    <p class="fs-5 fw-medium">{{ user.email }}</p>
+                </div>
+                
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary-custom rounded-pill px-4 py-3 fw-semibold w-100 hover-lift mt-auto">Edit Profile Information</a>
+            </div>
+        </div>
+
+        <div class="col-md-6 animate-fade-up delay-200">
+            <div class="glass-panel p-5 h-100 border-0 shadow-sm hover-lift">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow" style="width: 50px; height: 50px;">
+                        <i class="bi bi-car-front-fill fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-0">Recent Pickups</h4>
+                </div>
+                
+                {% if pickup_locations %}
+                    <div class="list-group list-group-flush bg-transparent">
+                        {% for loc in pickup_locations|slice:":3" %}
+                        <div class="list-group-item bg-transparent border-bottom border-light py-3 px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 fw-bold text-truncate" style="max-width: 250px;">{{ loc.address }}</h6>
+                                <small class="text-muted fw-medium">{{ loc.created_at|date:"M d, Y" }}</small>
+                            </div>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-bold">Saved</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if pickup_locations|length > 3 %}
+                        <div class="text-center mt-4">
+                            <a href="#" class="text-decoration-none fw-semibold text-primary">View all {{ pickup_locations|length }} locations</a>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-geo-alt display-4 text-muted mb-3 d-block opacity-50"></i>
+                        <p class="text-muted fw-medium">No pickup locations saved yet.</p>
+                        <a href="{% url 'book_cab' %}" class="btn btn-outline-success rounded-pill px-4 mt-2 fw-semibold">Book a Cab</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
