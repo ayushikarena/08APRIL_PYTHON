@@ -1,0 +1,21 @@
+<h2>Send OTP</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input 
+type="text" 
+name="mobile"
+placeholder="Mobile Number">
+
+<button>
+Send OTP
+</button>
+
+</form>
+
+
+<h3>
+{{message}}
+</h3>

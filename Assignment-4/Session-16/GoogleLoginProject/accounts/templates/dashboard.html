@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Dashboard</title>
+
+<style>
+
+body{
+    background:#111;
+    color:white;
+    font-family:Arial;
+}
+
+.box{
+
+    width:500px;
+    margin:100px auto;
+    background:#222;
+    padding:30px;
+    text-align:center;
+    border-radius:15px;
+
+}
+
+button{
+
+    background:#e53935;
+    color:white;
+    padding:12px 30px;
+    border:none;
+    border-radius:8px;
+
+}
+
+a{
+    color:white;
+    text-decoration:none;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+<h1>
+Welcome {{user.username}} 🎉
+</h1>
+
+
+<h3>
+Dashboard
+</h3>
+
+
+<p>
+Email: {{user.email}}
+</p>
+
+
+<a href="/accounts/logout/">
+
+<button>
+Logout
+</button>
+
+</a>
+
+
+</div>
+
+
+</body>
+
+</html>
